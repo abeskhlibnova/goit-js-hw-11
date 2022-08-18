@@ -1,6 +1,6 @@
 export function markupImgCard({
   webformatURL,
-  largeImageUR,
+  largeImageURL,
   tags,
   likes,
   views,
@@ -8,9 +8,10 @@ export function markupImgCard({
   downloads,
 }) {
   return `
+<a href="${largeImageURL}" class="link">
   <div class="photo-card">
     <img src="${webformatURL}" alt="${tags}" loading="lazy" class="photo-img" width="250" height="200"/>
-    <div class="info">
+      <div class="info">
     <div class="info-wrapper">
       <p class="info-item">
         <b>Likes</b>
@@ -37,6 +38,6 @@ export function markupImgCard({
       </div>
     </div>
   </div>
-
+</a>
     `;
 }

@@ -1,74 +1,120 @@
 import Notiflix from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
-import { getImg } from './getImg';
 import { markupImgCard } from './markupImgCard';
 import axios from 'axios';
+import simpleLightbox from 'simplelightbox';
 
+const API_KEY = '29337037-f6a5fd668b35f8f6ea13ad624';
+const BASE_URL = 'https://pixabay.com/api/';
 const refs = {
   form: document.querySelector('#search-form'),
   inputSearch: document.querySelector('input[name="searchQuery"]'),
   btnSearch: document.querySelector('.search-btn'),
   gallery: document.querySelector('.gallery'),
   btnLoadMore: document.querySelector('.load-more'),
+  lb: document.querySelector('.gallery a'),
 };
-const API_KEY = '29337037-f6a5fd668b35f8f6ea13ad624';
-refs.form.addEventListener('submit', onSearch);
-refs.btnLoadMore.addEventListener('clikc', getImg);
-const page = 1;
-function onSearch(e) {
+
+let page = 1;
+
+const createUrl = () => {
+  const searchResult = refs.inputSearch.value;
+  let url = `${BASE_URL}?key=${API_KEY}&q=${searchResult}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${page}`;
+  return url;
+};
+
+const onSearch = e => {
+  page = 1;
   e.preventDefault();
-  const searchResult = e.currentTarget.elements.searchQuery.value;
+  let url = createUrl();
 
-  console.log(searchResult);
+  getImg(url);
 
-  //   if (searchResult === '') {
-  //     // clearImgs();
-  //     return;
-  //   }
+  // кнопка Load More//
+  // onSeeBtnLoadMore();
 
-  async function getImg(searchResult) {
-    try {
-      const response = await axios.get(
-        `https://pixabay.com/api/?key=${API_KEY}&q=${searchResult}&image_type=photo&orientation=horizontal&safesearch=true&per_page=40&page=${page}`
-      );
-      console.log(response.data);
-      const hitsPic = response.data.hits;
-      addCard(hitsPic);
-    } catch (error) {
-      console.log('error', error);
-    }
+  if (e.type === 'submit') {
+    refs.gallery.innerHTML = '';
   }
-  getImg(searchResult);
+};
+window.addEventListener('scroll', () => {
+  if (
+    window.scrollY + window.innerHeight >=
+    document.documentElement.scrollHeight
+  ) {
+    page += 1;
+    let url = createUrl();
+    getImg(url);
+  }
+});
+async function getImg(url) {
+  try {
+    const response = await axios.get(url);
+    const hitsPic = response.data.hits;
+    const totalHits = response.data.totalHits;
 
-  addPage(page);
+    if (hitsPic === 0) {
+      nonImg();
+    }
+    if (page === 1) {
+      totalH(totalHits);
+    }
+
+    addCard(hitsPic);
+    if (page >= Math.ceil(totalHits / 40)) {
+      endImg();
+    }
+  } catch (error) {
+    errorSearch(error);
+  }
 }
-function addPage(page) {
+
+const onLoad = () => {
   page += 1;
-}
-function addCard(data) {
-  let picsList = '';
-  data.map(data => {
-    picsList += markupImgCard(data);
+  let url = createUrl();
+  getImg(url);
+};
+
+const onSeeBtnLoadMore = () => {
+  refs.btnLoadMore.classList.add('load');
+};
+
+const generateCard = array =>
+  array ? array.reduce((acc, item) => acc + markupImgCard(item), '') : '';
+
+const addCard = array => {
+  const result = generateCard(array);
+  refs.gallery.insertAdjacentHTML('beforeend', result);
+
+  let lightbox = new SimpleLightbox('.gallery a', {
+    captionDelay: 250,
+    captionsData: 'alt',
+    close: true,
+    enableKeyboard: true,
   });
+};
 
-  //   let lightbox = new SimpleLightbox('.gallery a', {
-  //     captionDelay: 250,
-  //     close: true,
-  //     enableKeyboard: true,
-  //   });
+const totalH = totalHits => {
+  Notiflix.Notify.info(`Hooray! We found ${totalHits} totalHits images.`);
+};
 
-  refs.gallery.insertAdjacentHTML('beforeend', picsList);
-}
+refs.form.addEventListener('submit', onSearch);
+refs.btnLoadMore.addEventListener('click', onLoad);
 
-// function errorSearch(error) {
-//   Notiflix.Notify.failure('Poprobujte escho!');
-// }
-// const { height: cardHeight } = document
-//   .querySelector('.gallery')
-//   .firstElementChild.getBoundingClientRect();
+const errorSearch = error => {
+  Notiflix.Notify.failure('Oops, something went wrong!');
+};
 
-// window.scrollBy({
-//   top: cardHeight * 2,
-//   behavior: 'smooth',
-// });
+const nonImg = () => {
+  Notiflix.Notify.warning(
+    'Sorry, there are no images matching your search query. Please try again.'
+  );
+};
+const endImg = () => {
+  refs.btnLoadMore.classList.remove('load');
+  refs.btnLoadMore.classList.add('hide');
+  Notiflix.Notify.warning(
+    "We're sorry, but you've reached the end of search results."
+  );
+};
