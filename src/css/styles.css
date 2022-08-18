@@ -1,11 +1,29 @@
 * {
     box-sizing: border-box;
 }
-
+body{
+    background-color: rgb(242, 232, 255);
+}
 header{
-    background-color: blue;
+    background-color:rgb(135, 53, 242);
     min-height: 50px;
     align-items: center;
+    
+}
+
+img {
+    display: block;
+    background-size: cover;
+    width: 100%;
+   
+}
+p {
+    margin-top: 0;
+    margin-bottom: 0;
+}
+.link {
+    display: block;
+    text-decoration: none;
 
 }
 .search-form{
@@ -13,8 +31,112 @@ header{
     justify-content: center;
     padding-top: 10px;
 padding-bottom: 10px;
+
 }
 .search-input{
     min-width: 200px;
     height: 30px;
+        border-radius: 4px;
+            border: 1px solid rgb(0, 0, 0, 0.1);
+}
+
+.search-btn {
+        display: flex;
+    height: 30px;
+width: 30px;
+    border-radius: 4px;
+    border: none;
+    align-items: center;
+    text-align: center;
+    background-color: rgb(197, 163, 242);
+
+    cursor: pointer;
+}
+
+.search-btn::before {
+    content: '';
+    width: 15px;
+    height: 25px;
+    background-image: url('../svg/search.svg');
+    background-size: cover;
+
+
+}
+
+.search {
+    width: 0.5390625em;
+}
+.section {
+    padding-top: 60px;
+    padding-bottom: 60px;
+}
+
+.container {
+    width: 1200px;
+    padding-left: 15px;
+    padding-right: 15px;
+    margin-left: auto;
+    margin-right: auto;
+        align-items: flex-start;
+}
+.gallery{
+    display: flex;
+    flex-wrap: wrap;
+    padding-top: 20px;
+}
+.photo-card{
+    width: 250px;
+    margin-left: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0px 1px 3px #0000001f, 0px 1px 1px #00000024, 0px 2px 1px #00000033;
+    border-radius: 0px 0px 4px 4px;
+}
+.info{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: auto;
+    margin-right: auto;
+    width: inherit;
+    background-color: white;
+}
+.info-wrapper{
+    
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    padding-left: 5px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    cursor: default;        
+}
+
+.info-item{
+    font-size: 14px;
+font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+.info-item-amount{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: 600;
+    line-height: 1.1;
+    font-size: 15px;
+}
+.load-more{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+        height: 40px;
+            min-width: 230px;
+            border-radius: 4px;
+            border: none;
+            align-items: center;
+            text-align: center;
+            background-color: rgb(197, 163, 242);
+                    cursor: pointer;
+                    box-shadow: 0px 1px 3px #0000001f, 0px 1px 1px #00000024, 0px 2px 1px #00000033;
+                        border-radius: 4px;
+                        border: 1px solid rgb(108, 108, 108, 0.4);
+
+
 }
