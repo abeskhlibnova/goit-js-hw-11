@@ -31,23 +31,12 @@ const onSearch = e => {
 
   getImg(url);
 
-  // кнопка Load More//
   onSeeBtnLoadMore();
 
   if (e.type === 'submit') {
     refs.gallery.innerHTML = '';
   }
 };
-// window.addEventListener('scroll', () => {
-//   if (
-//     window.scrollY + window.innerHeight >=
-//     document.documentElement.scrollHeight
-//   ) {
-//     page += 1;
-//     let url = createUrl();
-//     getImg(url);
-//   }
-// });
 async function getImg(url) {
   try {
     const response = await axios.get(url);
